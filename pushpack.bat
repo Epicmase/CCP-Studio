@@ -1,5 +1,9 @@
 @echo off
+
+set /p msg=Commit Message:
+
 git add .
-git commit -m "%*"
+git commit -m "%msg%"
 git push
+
 pause
