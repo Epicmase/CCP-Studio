@@ -173,7 +173,8 @@ tk.Button(
     left_panel,
     text="Apply Background",
     command=rebuild_grid
-)
+).pack()
+
 
 # =====================
 # CANVAS
