@@ -59,7 +59,7 @@ def redraw_grid():
 
 def canvas_click(event):
 
-    spacing = DOT_RADIUS * 3
+    spacing = max(50, DOT_RADIUS *3)
 
     start_x = 50
     start_y = 50
@@ -81,9 +81,12 @@ def canvas_click(event):
 def rebuild_grid():
 
     global grid_data
+    global DOT_RADIUS
 
     rows = int(rows_entry.get())
     cols = int(cols_entry.get())
+
+    DOT_RADIUS = int(radius_entry.get())
 
     grid_data = [
         ["gray" for _ in range(cols)]
@@ -138,6 +141,12 @@ for color in COLORS:
         width=10,
         command=lambda c=color: set_color(c)
     ).pack()
+
+tk.Label(left_panel, text="Dot Size").pack()
+
+radius_entry = tk.Entry(left_panel)
+radius_entry.insert(0, "20")
+radius_entry.pack()
 
 # =====================
 # CANVAS
