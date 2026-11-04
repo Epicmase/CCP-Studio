@@ -35,7 +35,7 @@ def set_color(color):
 def redraw_grid():
     canvas.delete("all")
 
-    spacing = DOT_RADIUS * 3
+    spacing = max(50, DOT_RADIUS *3)
 
     start_x = 50
     start_y = 50
@@ -82,11 +82,19 @@ def rebuild_grid():
 
     global grid_data
     global DOT_RADIUS
+    global BG_COLOR
 
     rows = int(rows_entry.get())
     cols = int(cols_entry.get())
 
     DOT_RADIUS = int(radius_entry.get())
+    try:
+        BG_COLOR = bg_entry.get()
+        canvas.config(bg=BG_COLOR)
+
+    except:
+        print("Invalid color:", bg_entry.get())
+        bg_entry.delete(0, tk.END)
 
     grid_data = [
         ["gray" for _ in range(cols)]
@@ -147,6 +155,25 @@ tk.Label(left_panel, text="Dot Size").pack()
 radius_entry = tk.Entry(left_panel)
 radius_entry.insert(0, "20")
 radius_entry.pack()
+
+tk.Label(
+    left_panel,
+    text="Background Color\n"
+         "(basic colors like red, blue, silver,\n"
+         "cyan, and gray work)\n"
+         "Hex codes are also supported\n"
+         "(remember the #)"
+).pack()
+
+bg_entry = tk.Entry(left_panel)
+bg_entry.insert(0, "#222222")
+bg_entry.pack()
+
+tk.Button(
+    left_panel,
+    text="Apply Background",
+    command=rebuild_grid
+)
 
 # =====================
 # CANVAS
