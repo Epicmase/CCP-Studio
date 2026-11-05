@@ -1,4 +1,9 @@
 import tkinter as tk
+import json
+from tkinter import filedialog
+import os
+import pathlib
+import time
 
 # =====================
 # SETTINGS
@@ -16,7 +21,8 @@ COLORS = [
     "#0000FF",  # Blue
     "#FFFF00",  # Yellow
     "#000000",  # Black
-    "#FFFFFF"   # White
+    "#FFFFFF",  # White
+    "#ffdab9"   # Peach Puff (from https://inventwithpython.com/blog/complete-list-tkinter-colors-valid-and-tested.html)
 ]
 
 current_color = COLORS[0]
@@ -103,6 +109,40 @@ def rebuild_grid():
 
     redraw_grid()
 
+def load():
+    loadedfile = filedialog.askopenfile()
+    
+    loadedjsontext = json.loads(loadedfile.read())
+
+def save():
+    filedirectory = filedialog.askdirectory()
+
+    project_name = name_entry.get()
+
+    project = {
+        "rows": rows_entry.get(),
+        "columns": cols_entry.get(),
+        "radius": DOT_RADIUS,
+        "background": BG_COLOR,
+        "girddata": grid_data,
+
+    }
+
+    savingtext = json.dumps(project)
+    filename = open(f"{filedirectory}\{project_name}.ccpproj", "w")
+    filename.write(savingtext)
+    filename.close()
+    popup = tk.Tk()
+    popup.title("Save Sucsessful")
+    popup.geometry("100x70")
+    tk.Label(popup, text=f"The File Was Sucsessfully saved to {filename}").pack()
+    countdown = 10
+    while countdown != 0:
+        tk.Label(popup, text=f"This message will close in {countdown} seconds")
+        time.sleep(1)
+        countdown = countdown - 1
+    popup.destroy()
+
 # =====================
 # WINDOW
 # =====================
@@ -175,6 +215,21 @@ tk.Button(
     command=rebuild_grid
 ).pack()
 
+tk.Button(
+    left_panel,
+    text="Load file",
+    command=load
+).pack()
+
+name_entry = tk.Entry(left_panel)
+name_entry.insert(0, "")
+name_entry.pack()
+
+tk.Button(
+    left_panel,
+    text="Save file\n\nENTER NAME BEFORE SAVE\nYOU WILL NOT BE ASKED\nAFTER CLICKING",
+    command=save
+).pack()
 
 # =====================
 # CANVAS
